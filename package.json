@@ -5,7 +5,7 @@
 	"description": "php loader module for webpack",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:jehon/php-raw-loader.git"
+		"url": "git@github.com:jehon/php-loader.git"
 	},
 	"licenses": [
 		{
