@@ -1,11 +1,11 @@
 {
-	"name": "raw-loader",
-	"version": "0.5.1",
-	"author": "Tobias Koppers @sokra",
-	"description": "raw loader module for webpack",
+	"name": "php-loader",
+	"version": "0.0.1",
+	"author": "Jean Honlet",
+	"description": "php loader module for webpack",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:webpack/raw-loader.git"
+		"url": "git@github.com:jehon/php-raw-loader.git"
 	},
 	"licenses": [
 		{

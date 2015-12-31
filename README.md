@@ -1,13 +1,13 @@
-# raw loader for webpack
+# php loader for webpack
 
 ## Installation
 
-`npm install raw-loader`
+`npm install php-loader`
 
 ## Usage
 
 ``` javascript
-var fileContent = require("raw!./file.txt");
+var fileContent = require("php!./file.txt");
 // => returns file.txt content as string
 ```
 
