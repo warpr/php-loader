@@ -1,16 +1,16 @@
 {
-	"name": "php-loader",
-	"version": "0.0.1",
-	"author": "Jean Honlet",
-	"description": "php loader module for webpack",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:jehon/php-loader.git"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://www.opensource.org/licenses/mit-license.php"
-		}
-	]
+  "name": "php-loader",
+  "version": "0.0.2",
+  "author": "Jean Honlet",
+  "description": "php loader module for webpack",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jehon/php-loader.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ]
 }
