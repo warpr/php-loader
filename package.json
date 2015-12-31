@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "author": "Jean Honlet",
   "description": "php loader module for webpack",
+  "keywords": [ "webpack", "php", "loader" ],
   "repository": {
     "type": "git",
     "url": "git@github.com:jehon/php-loader.git"
