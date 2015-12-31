@@ -1,5 +1,9 @@
 # php loader for webpack
 
+This package will load any php content and use php to turn it into a html page.
+
+Ex:
+
 ## Installation
 
 `npm install php-loader`
@@ -7,9 +11,27 @@
 ## Usage
 
 ``` javascript
-var fileContent = require("php!./file.txt");
-// => returns file.txt content as string
+var fileContent = require("php!./file.php");
+// => run file.php with php and return it as some content (html for example)
 ```
+It can also be used inside the webpack.js:
+module.exports = {
+  ...
+  module: {
+    loaders: [
+      ...
+      {
+        test: /\.php$/,
+        loaders: [
+          'html-minify',
+          'php-loader'
+        ]
+      },
+      ...
+    ]
+  },
+  ...
+}
 
 [Documentation: Using loaders](http://webpack.github.io/docs/using-loaders.html)
 
