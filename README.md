@@ -14,7 +14,11 @@ Ex:
 var fileContent = require("php!./file.php");
 // => run file.php with php and return it as some content (html for example)
 ```
-It can also be used inside the webpack.js:
+
+It can also be used inside the webpack configuration file (webpack.js):
+
+
+``` javascript
 module.exports = {
   ...
   module: {
@@ -32,6 +36,7 @@ module.exports = {
   },
   ...
 }
+```
 
 [Documentation: Using loaders](http://webpack.github.io/docs/using-loaders.html)
 
