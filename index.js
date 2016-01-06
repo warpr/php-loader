@@ -18,6 +18,16 @@ module.exports = function(content) {
   // this.callback(err, values...)
 
   //var query = loaderUtils.parseQuery(this.query);
+  // Sync run
+  // @see https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
+  // var child = require('child_process').spawnSync('php', [ resource ], { cwd: cwd, timeout: 1000 });
+  // console.log("R " + resource, " #" + child.status);
+  // if (child.status) {
+  //   throw new Error("problem with " + resource)
+  // } else {
+  //   return child.stdout.toString();
+  // }
+  // return "euh?"
 
   // this.resource
   // this.resourcePath
