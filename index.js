@@ -9,27 +9,41 @@
 //var loaderUtils = require("loader-utils");
 
 module.exports = function(content) {
+  // Hold the name of the file to be executed (a resource in webpack terminology)
   var resource = this.resource;
+
+  // The directory where the original file was run. This is necessary
+  // if the php script use the __DIR__ variable, wich refer to the original file.
+  // So if the file is runned "inline", we need to change path into that path so that
+  // __DIR__ point to the correct location.
   var cwd = this.context;
 
   // this.addDependency(headerPath); -> mark a dependancy for watching and cachable mode
   // this.cacheable && this.cacheable(); -> mark the file as cachable (true if dependancies are marked)
   // var query = loaderUtils.parseQuery(this.query);
 
+/*
   // Sync run
+  //    Old test kept here for documentation purpose. I know, it is not the prefered way to do it,
+  //    but it is not too bad to do it like this...
+  //
   // @see https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
-  // var child = require('child_process').spawnSync('php', [ resource ], { cwd: cwd, timeout: 1000 });
-  // console.log("R " + resource, " #" + child.status);
-  // if (child.status) {
-  //   throw new Error("problem with " + resource)
-  // } else {
-  //   return child.stdout.toString();
-  // }
-  // return "euh?"
+  var child = require('child_process').spawnSync('php', [ resource ], { cwd: cwd, timeout: 1000 });
+  if (child.status) {
+    throw new Error("problem with " + resource)
+  } else {
+    return child.stdout.toString();
+  }
+*/
 
   var callback = this.async();
 
-  child = require('child_process').spawn('php', [ resource ], { cwd: cwd });
+  /**
+  *
+  * Run the PHP file inplace.
+  *
+  */
+  child = require('child_process').spawn('php', [ resource ]);
   var self = this;
 
   // Send data to the child process via its stdin stream
@@ -41,9 +55,17 @@ module.exports = function(content) {
   var fullError = "";
 
   // Keep track of wich buffer is closed, since we can not determine it ourself.
+  // We could use the "ended" property, but this one is not a public one
+  // @See https://github.com/nodejs/node-v0.x-archive/blob/v0.11.11/lib/_stream_readable.js#L50
   var outIsClosed = false;
   var errIsClosed = false;
 
+  /**
+  * Run each time one of the two stream is closed.
+  * If the two streams (out and err) are closed, then fire the callback:
+  *   - if something went out on stderr, consider this as an error, and fire an error,
+  *   - otherwise, everything went fine, and stream out the php content.
+  */
   function endOfPhp() {
     if (outIsClosed && errIsClosed) {
       if (fullError) {
@@ -55,23 +77,23 @@ module.exports = function(content) {
     }
   }
 
-  // Listen for content:
+  // Listen for content
   child.stdout.on('data', function (data) {
     fullFile += data;
   });
 
-  // Listen for errors:
+  // Listen for errors
   child.stderr.on('data', function (data) {
     fullError += data;
   });
 
-  // When strout is closed, is the process ended?
+  // When strout is closed, test if the process is ended
   child.stdout.on('end', function () {
     outIsClosed = true;
     endOfPhp();
   });
 
-  // When strerr is closed, is the process ended?
+  // When strerr is closed, test if the process is ended
   child.stderr.on('end', function () {
     errIsClosed = true;
     endOfPhp();
