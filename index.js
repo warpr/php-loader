@@ -46,6 +46,21 @@ module.exports = function(content) {
   var fullFile = "";
   var fullError = "";
 
+  // Keep track of wich buffer is closed, since we can not determine it ourself.
+  var outIsClosed = false;
+  var errIsClosed = false;
+
+  function endOfPhp() {
+    if (outIsClosed && errIsClosed) {
+      if (fullError) {
+        self.emitError(fullError);
+        callback(fullError);
+      } else {
+        callback(null, fullFile);
+      }
+    }
+  }
+
   child.stdout.on('data', function (data) {
     fullFile += data;
   });
@@ -55,16 +70,15 @@ module.exports = function(content) {
     fullError += data;
   });
 
+  // When strout is closed, is the process ended?
   child.stdout.on('end', function () {
-    if (!fullError) {
-      callback(null, fullFile);
-    }
+    outIsClosed = true;
+    endOfPhp();
   });
 
+  // When strerr is closed, is the process ended?
   child.stderr.on('end', function () {
-    if (fullError) {
-      self.emitError(fullError);
-      callback(fullError);
-    }
+    errIsClosed = true;
+    endOfPhp();
   });
 }
