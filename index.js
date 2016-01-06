@@ -11,7 +11,8 @@
 module.exports = function(content) {
   // this.cacheable && this.cacheable();
 
-  var callback = this.async();
+  var resource = this.resource;
+  var cwd = this.context;
 
   // this.addDependency(headerPath); -> mark a dependancy for watching and cachable mode
   // Use the this.resolve function to resolve the path -> get the content???
@@ -32,12 +33,13 @@ module.exports = function(content) {
   // this.resource
   // this.resourcePath
   // this.resourceQuery
+  var callback = this.async();
 
-  child = require('child_process').spawn('php'); //, [ '-v' ]);
+  child = require('child_process').spawn('php', [ resource ], { cwd: cwd });
   var self = this;
 
   // Send data to the child process via its stdin stream
-  child.stdin.write(content);
+  // child.stdin.write(content);
   child.stdin.end();
 
   // Listen for any response from the child:
