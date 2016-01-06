@@ -1,24 +1,21 @@
 /*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
 */
-
-//var loaderUtils = require("loader-utils");
 
 // @See https://webpack.github.io/docs/how-to-write-a-loader.html
 // @See https://webpack.github.io/docs/loaders.html
 
-module.exports = function(content) {
-  // this.cacheable && this.cacheable();
+//var loaderUtils = require("loader-utils");
 
+module.exports = function(content) {
   var resource = this.resource;
   var cwd = this.context;
 
   // this.addDependency(headerPath); -> mark a dependancy for watching and cachable mode
-  // Use the this.resolve function to resolve the path -> get the content???
-  // this.callback(err, values...)
+  // this.cacheable && this.cacheable(); -> mark the file as cachable (true if dependancies are marked)
+  // var query = loaderUtils.parseQuery(this.query);
 
-  //var query = loaderUtils.parseQuery(this.query);
   // Sync run
   // @see https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
   // var child = require('child_process').spawnSync('php', [ resource ], { cwd: cwd, timeout: 1000 });
@@ -30,9 +27,6 @@ module.exports = function(content) {
   // }
   // return "euh?"
 
-  // this.resource
-  // this.resourcePath
-  // this.resourceQuery
   var callback = this.async();
 
   child = require('child_process').spawn('php', [ resource ], { cwd: cwd });
@@ -61,11 +55,12 @@ module.exports = function(content) {
     }
   }
 
+  // Listen for content:
   child.stdout.on('data', function (data) {
     fullFile += data;
   });
 
-  // Listen for any errors:
+  // Listen for errors:
   child.stderr.on('data', function (data) {
     fullError += data;
   });
