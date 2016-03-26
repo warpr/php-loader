@@ -6,9 +6,10 @@
 // @See https://webpack.github.io/docs/how-to-write-a-loader.html
 // @See https://webpack.github.io/docs/loaders.html
 
-//var loaderUtils = require("loader-utils");
+loaderUtils = require('loader-utils');
 
-module.exports = function(content) {
+// function phpLoader(content) {
+function phpLoader(content) {
   // Hold the name of the file to be executed (a resource in webpack terminology)
   var resource = this.resource;
 
@@ -18,9 +19,10 @@ module.exports = function(content) {
   // __DIR__ point to the correct location.
   var cwd = this.context;
 
+
   // this.addDependency(headerPath); -> mark a dependancy for watching and cachable mode
   // this.cacheable && this.cacheable(); -> mark the file as cachable (true if dependancies are marked)
-  // var query = loaderUtils.parseQuery(this.query);
+  var query = loaderUtils.parseQuery(this.query);
 
 /*
   // Sync run
@@ -37,13 +39,20 @@ module.exports = function(content) {
 */
 
   var callback = this.async();
+  var options = Object.assign({
+    proxyScript: null
+  }, query);
 
   /**
   *
   * Run the PHP file inplace.
   *
   */
-  child = require('child_process').spawn('php', [ resource ]);
+  var args = [ resource ];
+  if (options.proxy) {
+    args.unshift(options.proxy);
+  }
+  child = require('child_process').spawn('php', args);
   var self = this;
 
   // Send data to the child process via its stdin stream
@@ -99,3 +108,9 @@ module.exports = function(content) {
     endOfPhp();
   });
 }
+
+  // phpLoader.prototype.apply = function(options) {
+  //   phpLoader.prototype.options = options;
+  // }
+
+module.exports = phpLoader;

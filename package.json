@@ -12,10 +12,8 @@
     "type": "git",
     "url": "git@github.com:jehon/php-loader.git"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
-    }
-  ]
+  "license": "MIT",
+  "dependencies": {
+    "loader-utils": "latest"
+  }
 }
