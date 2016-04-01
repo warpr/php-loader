@@ -1,6 +1,6 @@
 {
   "name": "php-loader",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "author": "Jean Honlet",
   "description": "php loader module for webpack",
   "keywords": [
