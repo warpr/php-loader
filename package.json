@@ -1,6 +1,6 @@
 {
   "name": "php-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Jean Honlet",
   "description": "php loader module for webpack",
   "keywords": [
@@ -14,6 +14,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "glob": "^7.0.5",
     "loader-utils": "latest"
   }
 }
