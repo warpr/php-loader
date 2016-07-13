@@ -7,8 +7,8 @@
 // @See https://webpack.github.io/docs/loaders.html
 
 loaderUtils = require('loader-utils');
+glob = require('glob');
 
-// function phpLoader(content) {
 function phpLoader(content) {
   // Hold the name of the file to be executed (a resource in webpack terminology)
   var resource = this.resource;
@@ -24,44 +24,53 @@ function phpLoader(content) {
   // this.cacheable && this.cacheable(); -> mark the file as cachable (true if dependancies are marked)
   var query = loaderUtils.parseQuery(this.query);
 
-/*
-  // Sync run
-  //    Old test kept here for documentation purpose. I know, it is not the prefered way to do it,
-  //    but it is not too bad to do it like this...
-  //
-  // @see https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
-  var child = require('child_process').spawnSync('php', [ resource ], { cwd: cwd, timeout: 1000 });
-  if (child.status) {
-    throw new Error("problem with " + resource)
-  } else {
-    return child.stdout.toString();
-  }
-*/
-
   var callback = this.async();
   var options = Object.assign({
     proxyScript: null
   }, query);
+
+  // Listen for any response from the child:
+  var fullFile = "";
+  var fullError = "";
 
   /**
   *
   * Run the PHP file inplace.
   *
   */
-  var args = [ resource ];
+  var args = [ ];
   if (options.proxy) {
-    args.unshift(options.proxy);
+    this.addDependency(options.proxy);
+    args.push(options.proxy);
   }
+
+  if (options.args) {
+    args = args.concat(options.args);
+  }
+
+  this.addDependency(resource);
+  args.push(resource);
+
+  if (options.dependancies) {
+    if (!Array.isArray(options.dependancies)) {
+      options.dependancies = [ options.dependancies ];
+    }
+    for(a of options.dependancies) {
+      for(b of glob.sync(a)) {
+        if (options.debug) {
+          fullFile += "<!-- dependant of " + b + "-->\n";
+        }
+        this.addDependency(b);
+      }
+    }
+  }
+
   child = require('child_process').spawn('php', args);
   var self = this;
 
   // Send data to the child process via its stdin stream
   // child.stdin.write(content);
   child.stdin.end();
-
-  // Listen for any response from the child:
-  var fullFile = "";
-  var fullError = "";
 
   // Keep track of wich buffer is closed, since we can not determine it ourself.
   // We could use the "ended" property, but this one is not a public one
@@ -108,9 +117,5 @@ function phpLoader(content) {
     endOfPhp();
   });
 }
-
-  // phpLoader.prototype.apply = function(options) {
-  //   phpLoader.prototype.options = options;
-  // }
 
 module.exports = phpLoader;
