@@ -72,6 +72,9 @@ In this case, the command to be executed by php-loader to get the file 'resource
 
 ```
 
+## Thanks
+Thanks to @fullsteamlabs to fix compatibility issue with webpack 2.
+
 ## License
 
 MIT (http://www.opensource.org/licenses/mit-license.php)
