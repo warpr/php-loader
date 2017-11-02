@@ -22,7 +22,7 @@ function phpLoader(content) {
 
   // this.addDependency(headerPath); -> mark a dependancy for watching and cachable mode
   // this.cacheable && this.cacheable(); -> mark the file as cachable (true if dependancies are marked)
-  var query = loaderUtils.parseQuery(this.query);
+  var query = (this.query === '' ? {} : loaderUtils.parseQuery(this.query));
 
   var callback = this.async();
   var options = Object.assign({
