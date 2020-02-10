@@ -1,8 +1,12 @@
 # php loader for webpack
 
+## Looking for anyone to take over this package...
+## If you did fork, and you think your work is valuable, please contact me so I can give over the package on npmjs.
+
+
+
 This package will load any php content and use php to turn it into a html page.
 
-Ex:
 
 ## Installation
 
